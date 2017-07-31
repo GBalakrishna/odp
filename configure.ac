@@ -188,12 +188,16 @@ then
     m4_include([./platform/linux-generic/m4/configure.m4])
     m4_include([./test/linux-generic/m4/configure.m4])
     IMPLEMENTATION_NAME="linux-generic"
+    ODP_CFLAGS="$ODP_CFLAGS -std=c99"
+    ODP_LIB_STR="odp-linux"
 else
     if test "${with_platform}" == "linux-dpdk";
     then
         m4_include([./platform/linux-dpdk/m4/configure.m4])
         m4_include([./test/linux-dpdk/m4/configure.m4])
         IMPLEMENTATION_NAME="linux-dpdk"
+        ODP_CFLAGS="$ODP_CFLAGS -std=gnu99"
+        ODP_LIB_STR="odp-dpdk"
     else
         echo "UNSUPPORTED PLATFORM: ${with_platform}"
         exit 1
@@ -201,6 +205,7 @@ else
 fi
 
 ODP_CFLAGS="$ODP_CFLAGS -DIMPLEMENTATION_NAME=$IMPLEMENTATION_NAME"
+AC_SUBST(ODP_LIB_STR)
 
 ##########################################################################
 # Set the install directory for test binaries/scripts
@@ -326,7 +331,6 @@ ODP_CFLAGS="$ODP_CFLAGS -W -Wall -Werror -Wstrict-prototypes -Wmissing-prototype
 ODP_CFLAGS="$ODP_CFLAGS -Wmissing-declarations -Wold-style-definition -Wpointer-arith"
 ODP_CFLAGS="$ODP_CFLAGS -Wcast-align -Wnested-externs -Wcast-qual -Wformat-nonliteral"
 ODP_CFLAGS="$ODP_CFLAGS -Wformat-security -Wundef -Wwrite-strings"
-ODP_CFLAGS="$ODP_CFLAGS -std=gnu99"
 
 dnl Use -Werror in the checks below since Clang emits a warning instead of
 dnl an error when it encounters an unknown warning option.
