@@ -21,10 +21,13 @@ AM_CFLAGS +=  -I$(top_srcdir)/include/odp/arch/@ARCH_ABI@
 AM_CFLAGS +=  -I$(top_srcdir)/include
 AM_CFLAGS +=  -I$(top_builddir)/include
 AM_CFLAGS +=  -Iinclude
+AM_CFLAGS +=  -DSYSCONFDIR=\"@sysconfdir@\"
+AM_CFLAGS +=  -D_ODP_PKTIO_IPC
 
 include_HEADERS = \
 		  $(top_srcdir)/include/odp.h \
-		  $(top_srcdir)/include/odp_api.h
+		  $(top_srcdir)/include/odp_api.h \
+		  $(top_srcdir)/include/odp_drv.h
 
 odpincludedir= $(includedir)/odp
 odpinclude_HEADERS = \
@@ -120,12 +123,36 @@ odpapiplatinclude_HEADERS = \
 
 odpdrvincludedir = $(includedir)/odp/drv
 odpdrvinclude_HEADERS = \
-		  $(srcdir)/include/odp/drv/compiler.h
+		  $(srcdir)/include/odp/drv/align.h \
+		  $(srcdir)/include/odp/drv/atomic.h \
+		  $(srcdir)/include/odp/drv/barrier.h \
+		  $(srcdir)/include/odp/drv/byteorder.h \
+		  $(srcdir)/include/odp/drv/compiler.h \
+		  $(srcdir)/include/odp/drv/driver.h \
+		  $(srcdir)/include/odp/drv/hints.h \
+		  $(srcdir)/include/odp/drv/shm.h \
+		  $(srcdir)/include/odp/drv/spinlock.h \
+		  $(srcdir)/include/odp/drv/std_types.h \
+		  $(srcdir)/include/odp/drv/sync.h
+
+odpdrvplatincludedir = $(includedir)/odp/drv/plat
+odpdrvplatinclude_HEADERS = \
+		  $(srcdir)/include/odp/drv/plat/atomic_types.h \
+		  $(srcdir)/include/odp/drv/plat/barrier_types.h \
+		  $(srcdir)/include/odp/drv/plat/byteorder_types.h \
+		  $(srcdir)/include/odp/drv/compiler.h \
+		  $(srcdir)/include/odp/drv/plat/driver_types.h \
+		  $(srcdir)/include/odp/drv/plat/shm_types.h \
+		  $(srcdir)/include/odp/drv/plat/spinlock_types.h \
+		  $(srcdir)/include/odp/drv/plat/strong_types.h
+
 
 noinst_HEADERS = \
 		  ${top_srcdir}/platform/linux-generic/include/_fdserver_internal.h \
 		  ${top_srcdir}/platform/linux-generic/include/_ishm_internal.h \
 		  ${top_srcdir}/platform/linux-generic/include/_ishmphy_internal.h \
+		  ${top_srcdir}/platform/linux-generic/include/_ishmpool_internal.h \
+		  ${top_srcdir}/platform/linux-generic/include/drv_driver_internal.h\
 		  ${top_srcdir}/platform/linux-generic/include/odp_align_internal.h \
 		  ${top_srcdir}/platform/linux-generic/include/odp_atomic_internal.h \
 		  ${srcdir}/include/odp_buffer_inlines.h \
@@ -153,6 +180,7 @@ noinst_HEADERS = \
 		  ${srcdir}/include/odp_pool_internal.h \
 		  ${srcdir}/include/odp_posix_extensions.h \
 		  ${top_srcdir}/platform/linux-generic/include/odp_queue_internal.h \
+		  ${top_srcdir}/platform/linux-generic/include/odp_queue_if.h \
 		  ${top_srcdir}/platform/linux-generic/include/odp_ring_internal.h \
 		  ${top_srcdir}/platform/linux-generic/include/odp_schedule_if.h \
 		  ${top_srcdir}/platform/linux-generic/include/odp_sorted_list_internal.h \
@@ -172,6 +200,8 @@ __LIB__libodp_dpdk_la_SOURCES = \
 			   ../linux-generic/_fdserver.c \
 			   ../linux-generic/_ishm.c \
 			   ../linux-generic/_ishmphy.c \
+			   ../linux-generic/_ishmpool.c \
+			   ../linux-generic/_modules.c \
 			   ../linux-generic/odp_atomic.c \
 			   ../linux-generic/odp_barrier.c \
 			   ../linux-generic/odp_bitmap.c \
@@ -187,6 +217,7 @@ __LIB__libodp_dpdk_la_SOURCES = \
 			   ../linux-generic/odp_hash.c \
 			   odp_init.c \
 			   ../linux-generic/odp_impl.c \
+			   ../linux-generic/odp_ipsec.c \
 			   ../linux-generic/odp_name_table.c \
 			   odp_packet.c \
 			   odp_packet_dpdk.c \
@@ -196,6 +227,7 @@ __LIB__libodp_dpdk_la_SOURCES = \
 			   ../linux-generic/odp_pkt_queue.c \
 			   odp_pool.c \
 			   ../linux-generic/odp_queue.c \
+			   ../linux-generic/odp_queue_if.c \
 			   ../linux-generic/odp_rwlock.c \
 			   ../linux-generic/odp_rwlock_recursive.c \
 			   ../linux-generic/odp_schedule.c \
@@ -217,6 +249,11 @@ __LIB__libodp_dpdk_la_SOURCES = \
 			   ../linux-generic/odp_traffic_mngr.c \
 			   ../linux-generic/odp_version.c \
 			   ../linux-generic/odp_weak.c \
+			   ../linux-generic/drv_atomic.c \
+			   ../linux-generic/drv_barrier.c \
+			   ../linux-generic/drv_driver.c \
+			   ../linux-generic/drv_shm.c \
+			   ../linux-generic/drv_spinlock.c \
 			   arch/@ARCH_DIR@/odp_cpu_arch.c \
 			   arch/@ARCH_DIR@/odp_sysinfo_parse.c
 
