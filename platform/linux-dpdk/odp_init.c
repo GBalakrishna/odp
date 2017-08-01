@@ -280,7 +280,7 @@ int odp_init_global(odp_instance_t *instance,
 	}
 	stage = PKTIO_INIT;
 
-	if (odp_timer_init_global()) {
+	if (odp_timer_init_global(params)) {
 		ODP_ERR("ODP timer init failed.\n");
 		goto init_failed;
 	}
@@ -308,6 +308,19 @@ int odp_init_global(odp_instance_t *instance,
 		ODP_ERR("ODP name table init failed\n");
 		goto init_failed;
 	}
+	stage = NAME_TABLE_INIT;
+
+	if (_odpdrv_driver_init_global()) {
+		ODP_ERR("ODP drivers init failed\n");
+		goto init_failed;
+	}
+	stage = DRIVER_INIT;
+
+	if (_odp_modules_init_global()) {
+		ODP_ERR("ODP modules init failed\n");
+		goto init_failed;
+	}
+	/* stage = DRIVER_INIT; */
 
 	/* Dummy support for single instance */
 	*instance = (odp_instance_t)odp_global_data.main_pid;
@@ -334,6 +347,14 @@ int _odp_term_global(enum init_stage stage)
 
 	switch (stage) {
 	case ALL_INIT:
+	case MODULES_INIT:
+	case DRIVER_INIT:
+		if (_odpdrv_driver_term_global()) {
+			ODP_ERR("driver term failed.\n");
+			rc = -1;
+		}
+		/* Fall through */
+
 	case NAME_TABLE_INIT:
 		if (_odp_int_name_tbl_term_global()) {
 			ODP_ERR("Name table term failed.\n");
