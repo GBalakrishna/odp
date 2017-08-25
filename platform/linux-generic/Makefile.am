@@ -185,7 +185,6 @@ noinst_HEADERS = \
 		  ${srcdir}/include/odp_packet_internal.h \
 		  ${srcdir}/include/odp_packet_io_internal.h \
 		  ${srcdir}/include/odp_packet_io_ring_internal.h \
-		  ${srcdir}/pktio/dpdk.h \
 		  ${srcdir}/include/odp_pktio_ops_ipc.h \
 		  ${srcdir}/include/odp_pktio_ops_loopback.h \
 		  ${srcdir}/include/odp_pktio_ops_netmap.h \
@@ -267,7 +266,6 @@ __LIB__libodp_linux_la_SOURCES = \
 			   pktio/common.c \
 			   pktio/loopback.c \
 			   pktio/netmap.c \
-			   pktio/dpdk.c \
 			   pktio/socket.c \
 			   pktio/socket_mmap.c \
 			   pktio/sysfs.c \
@@ -342,7 +340,6 @@ __LIB__libodp_linux_la_SOURCES += ../../frameworks/modular/odp_module.c
 
 __LIB__libodp_linux_la_LIBADD = $(ATOMIC_LIBS)
 __LIB__libodp_linux_la_LIBADD += $(OPENSSL_LIBS)
-__LIB__libodp_linux_la_LIBADD += $(DPDK_LIBS) $(DPDK_PMDS)
 __LIB__libodp_linux_la_LIBADD += $(PTHREAD_LIBS)
 __LIB__libodp_linux_la_LIBADD += $(TIMER_LIBS)
 __LIB__libodp_linux_la_LIBADD += $(LIBCONFIG_LIBS)
