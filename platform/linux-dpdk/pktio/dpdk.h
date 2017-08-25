@@ -4,8 +4,8 @@
  * SPDX-License-Identifier:     BSD-3-Clause
  */
 
-#ifndef ODP_PACKET_DPDK_H
-#define ODP_PACKET_DPDK_H
+#ifndef ODP_PKTIO_OPS_DPDK_H
+#define ODP_PKTIO_OPS_DPDK_H
 
 #include <stdint.h>
 #include <net/if.h>

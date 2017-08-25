@@ -5,7 +5,7 @@
  */
 
 #include <odp_posix_extensions.h>
-#include <odp_packet_dpdk.h>
+#include <pktio/dpdk.h>
 #include <odp/api/init.h>
 #include <odp_debug_internal.h>
 #include <odp/api/debug.h>
