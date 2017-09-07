@@ -26,7 +26,7 @@
 #include <inttypes.h>
 
 /* for DPDK */
-#include <odp_packet_dpdk.h>
+#include <pktio/dpdk.h>
 
 #ifdef POOL_USE_TICKETLOCK
 #include <odp/api/ticketlock.h>

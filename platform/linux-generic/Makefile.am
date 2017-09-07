@@ -185,12 +185,14 @@ noinst_HEADERS = \
 		  ${srcdir}/include/odp_name_table_internal.h \
 		  ${srcdir}/include/odp_packet_internal.h \
 		  ${srcdir}/include/odp_packet_io_internal.h \
-		  ${srcdir}/include/odp_packet_io_ipc_internal.h \
 		  ${srcdir}/include/odp_packet_io_ring_internal.h \
-		  ${srcdir}/include/odp_packet_netmap.h \
-		  ${srcdir}/include/odp_packet_dpdk.h \
-		  ${srcdir}/include/odp_packet_socket.h \
-		  ${srcdir}/include/odp_packet_tap.h \
+		  ${srcdir}/include/odp_pktio_ops_ipc.h \
+		  ${srcdir}/include/odp_pktio_ops_loopback.h \
+		  ${srcdir}/include/odp_pktio_ops_netmap.h \
+		  ${srcdir}/include/odp_pktio_ops_pcap.h \
+		  ${srcdir}/include/odp_pktio_ops_socket.h \
+		  ${srcdir}/include/odp_pktio_ops_tap.h \
+		  ${srcdir}/include/odp_pktio_ops_subsystem.h \
 		  ${srcdir}/include/odp_pkt_queue_internal.h \
 		  ${srcdir}/include/odp_pool_internal.h \
 		  ${srcdir}/include/odp_pool_subsystem.h \
@@ -261,12 +263,11 @@ __LIB__libodp_linux_la_SOURCES = \
 			   odp_packet_flags.c \
 			   odp_packet_io.c \
 			   pktio/ethtool.c \
-			   pktio/io_ops.c \
+			   pktio/subsystem.c \
 			   pktio/ipc.c \
-			   pktio/pktio_common.c \
-			   pktio/loop.c \
+			   pktio/common.c \
+			   pktio/loopback.c \
 			   pktio/netmap.c \
-			   pktio/dpdk.c \
 			   pktio/socket.c \
 			   pktio/socket_mmap.c \
 			   pktio/sysfs.c \
@@ -342,7 +343,6 @@ __LIB__libodp_linux_la_SOURCES += ../../frameworks/modular/odp_module.c
 
 __LIB__libodp_linux_la_LIBADD = $(ATOMIC_LIBS)
 __LIB__libodp_linux_la_LIBADD += $(OPENSSL_LIBS)
-__LIB__libodp_linux_la_LIBADD += $(DPDK_LIBS) $(DPDK_PMDS)
 __LIB__libodp_linux_la_LIBADD += $(PTHREAD_LIBS)
 __LIB__libodp_linux_la_LIBADD += $(TIMER_LIBS)
 __LIB__libodp_linux_la_LIBADD += $(LIBCONFIG_LIBS)

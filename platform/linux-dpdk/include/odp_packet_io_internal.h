@@ -29,21 +29,16 @@ extern "C" {
 
 #define PKTIO_MAX_QUEUES 64
 #include <linux/if_ether.h>
-#include <odp_packet_dpdk.h>
+#include <pktio/dpdk.h>
+
+/* Forward declaration */
+typedef union pktio_entry_u pktio_entry_t;
+#include <odp_pktio_ops_subsystem.h>
 
 #define PKTIO_NAME_LEN 256
 
 #define PKTIN_INVALID  ((odp_pktin_queue_t) {ODP_PKTIO_INVALID, 0})
 #define PKTOUT_INVALID ((odp_pktout_queue_t) {ODP_PKTIO_INVALID, 0})
-
-/* Forward declaration */
-struct pktio_if_ops;
-struct pkt_dpdk_t;
-
-typedef struct {
-	odp_queue_t loopq;		/**< loopback queue for "loop" device */
-	odp_bool_t promisc;		/**< promiscuous mode state */
-} pkt_loop_t;
 
 /** Packet socket using dpdk mmaped rings for both Rx and Tx */
 typedef struct {
@@ -60,19 +55,16 @@ typedef struct {
 	odp_bool_t lockless_tx;		  /**< no locking for tx */
 	odp_ticketlock_t rx_lock[PKTIO_MAX_QUEUES];  /**< RX queue locks */
 	odp_ticketlock_t tx_lock[PKTIO_MAX_QUEUES];  /**< TX queue locks */
-} pkt_dpdk_t;
+} pktio_ops_dpdk_data_t;
 
 struct pktio_entry {
-	const struct pktio_if_ops *ops; /**< Implementation specific methods */
+	const pktio_ops_module_t *ops;	/**< Implementation specific methods */
+	pktio_ops_data_t ops_data;
 	/* These two locks together lock the whole pktio device */
 	odp_ticketlock_t rxl;		/**< RX ticketlock */
 	odp_ticketlock_t txl;		/**< TX ticketlock */
 	int cls_enabled;		/**< is classifier enabled */
 	odp_pktio_t handle;		/**< pktio handle */
-	union {
-		pkt_loop_t pkt_loop;	/**< Using loopback for IO */
-		pkt_dpdk_t pkt_dpdk;	/**< using DPDK API for IO */
-	};
 	enum {
 		/* Not allocated */
 		PKTIO_STATE_FREE = 0,
@@ -116,49 +108,15 @@ struct pktio_entry {
 	} out_queue[PKTIO_MAX_QUEUES];
 };
 
-typedef union {
+union pktio_entry_u {
 	struct pktio_entry s;
 	uint8_t pad[ROUNDUP_CACHE_LINE(sizeof(struct pktio_entry))];
-} pktio_entry_t;
+};
 
 typedef struct {
 	odp_spinlock_t lock;
 	pktio_entry_t entries[ODP_CONFIG_PKTIO_ENTRIES];
 } pktio_table_t;
-
-typedef struct pktio_if_ops {
-	const char *name;
-	void (*print)(pktio_entry_t *pktio_entry);
-	int (*init_global)(void);
-	int (*init_local)(void);
-	int (*term)(void);
-	int (*open)(odp_pktio_t pktio, pktio_entry_t *pktio_entry,
-		    const char *devname, odp_pool_t pool);
-	int (*close)(pktio_entry_t *pktio_entry);
-	int (*start)(pktio_entry_t *pktio_entry);
-	int (*stop)(pktio_entry_t *pktio_entry);
-	int (*stats)(pktio_entry_t *pktio_entry, odp_pktio_stats_t *stats);
-	int (*stats_reset)(pktio_entry_t *pktio_entry);
-	uint64_t (*pktin_ts_res)(pktio_entry_t *pktio_entry);
-	odp_time_t (*pktin_ts_from_ns)(pktio_entry_t *pktio_entry, uint64_t ns);
-	int (*recv)(pktio_entry_t *entry, int index, odp_packet_t packets[],
-		    int num);
-	int (*send)(pktio_entry_t *entry, int index,
-		    const odp_packet_t packets[], int num);
-	uint32_t (*mtu_get)(pktio_entry_t *pktio_entry);
-	int (*promisc_mode_set)(pktio_entry_t *pktio_entry,  int enable);
-	int (*promisc_mode_get)(pktio_entry_t *pktio_entry);
-	int (*mac_get)(pktio_entry_t *pktio_entry, void *mac_addr);
-	int (*link_status)(pktio_entry_t *pktio_entry);
-	int (*capability)(pktio_entry_t *pktio_entry,
-			  odp_pktio_capability_t *capa);
-	int (*config)(pktio_entry_t *pktio_entry,
-		      const odp_pktio_config_t *config);
-	int (*input_queues_config)(pktio_entry_t *pktio_entry,
-				   const odp_pktin_queue_param_t *param);
-	int (*output_queues_config)(pktio_entry_t *pktio_entry,
-				    const odp_pktout_queue_param_t *p);
-} pktio_if_ops_t;
 
 extern void *pktio_entry_ptr[];
 
@@ -202,10 +160,6 @@ int single_recv_queue(pktio_entry_t *entry, int index, odp_packet_t packets[],
 		      int num);
 int single_send_queue(pktio_entry_t *entry, int index,
 		      const odp_packet_t packets[], int num);
-
-extern const pktio_if_ops_t loopback_pktio_ops;
-extern const pktio_if_ops_t dpdk_pktio_ops;
-extern const pktio_if_ops_t * const pktio_if_ops[];
 
 #ifdef __cplusplus
 }

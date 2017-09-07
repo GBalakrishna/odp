@@ -187,14 +187,16 @@ noinst_HEADERS = \
 		  ${top_srcdir}/platform/linux-generic/include/odp_crypto_internal.h \
 		  ${top_srcdir}/platform/linux-generic/include/odp_forward_typedefs_internal.h \
 		  ${top_srcdir}/platform/linux-generic/include/odp_internal.h \
-		  ${srcdir}/include/odp_packet_dpdk.h \
+		  ${srcdir}/pktio/dpdk.h \
 		  ${srcdir}/include/odp_packet_internal.h \
+		  ${top_srcdir}/platform/linux-generic/include/odp_pktio_ops_ipc.h \
+		  ${top_srcdir}/platform/linux-generic/include/odp_pktio_ops_subsystem.h \
+		  ${top_srcdir}/platform/linux-generic/include/odp_pktio_ops_socket.h \
+		  ${top_srcdir}/platform/linux-generic/include/odp_pktio_ops_loopback.h \
 		  ${top_srcdir}/platform/linux-generic/include/odp_name_table_internal.h \
 		  ${srcdir}/include/odp_packet_io_internal.h \
 		  ${srcdir}/include/odp_errno_define.h \
-		  ${top_srcdir}/platform/linux-generic/include/odp_packet_io_ipc_internal.h \
 		  ${top_srcdir}/platform/linux-generic/include/odp_packet_io_ring_internal.h \
-		  ${top_srcdir}/platform/linux-generic/include/odp_packet_socket.h \
 		  ${top_srcdir}/platform/linux-generic/include/odp_pkt_queue_internal.h \
 		  ${srcdir}/include/odp_pool_internal.h \
 		  ${top_srcdir}/platform/linux-generic/include/odp_pool_subsystem.h \
@@ -240,10 +242,11 @@ __LIB__libodp_dpdk_la_SOURCES = \
 			   ../linux-generic/odp_ipsec.c \
 			   ../linux-generic/odp_name_table.c \
 			   odp_packet.c \
-			   odp_packet_dpdk.c \
+			   pktio/dpdk.c \
+			   pktio/subsystem.c \
 			   odp_packet_flags.c \
 			   ../linux-generic/odp_packet_io.c \
-			   ../linux-generic/pktio/loop.c \
+			   ../linux-generic/pktio/loopback.c \
 			   ../linux-generic/odp_pkt_queue.c \
 			   pool/dpdk.c \
 			   ../linux-generic/odp_queue.c \
