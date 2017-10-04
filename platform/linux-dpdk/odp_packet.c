@@ -786,8 +786,10 @@ int odp_packet_concat(odp_packet_t *dst, odp_packet_t src)
 	uint32_t dst_len;
 	uint32_t src_len;
 
-	if (odp_likely(!rte_pktmbuf_chain(mb_dst, mb_src))) {
+	if (odp_likely(rte_mempool_avail_count(mb_dst->pool) != 1 &&
+		       !rte_pktmbuf_chain(mb_dst, mb_src))) {
 		dst_hdr->buf_hdr.totsize += src_hdr->buf_hdr.totsize;
+		mb_src->nb_segs = 1;
 		return 0;
 	}
 
