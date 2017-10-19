@@ -20,6 +20,8 @@ AM_CFLAGS = $(CUNIT_CFLAGS)
 
 AM_LDFLAGS = -L$(LIB) -static
 
+LOG_COMPILER = $(top_srcdir)/$(TEST_WRAPPER)
+
 @VALGRIND_CHECK_RULES@
 valgrind_tools = memcheck
 

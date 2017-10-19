@@ -197,7 +197,10 @@ AS_IF([test "${with_platform}" = "linux-generic"],
           [m4_include([./test/linux-dpdk/m4/configure.m4])]
           [IMPLEMENTATION_NAME="linux-dpdk"]
           [ODP_CFLAGS="$ODP_CFLAGS -std=gnu99"]
-          [ODP_LIB_STR="odp-dpdk"],
+          [ODP_LIB_STR="odp-dpdk"]
+          [AC_CONFIG_SRCDIR(test/linux-dpdk/wrapper-script.sh)]
+          [TEST_WRAPPER="test/linux-dpdk/wrapper-script.sh"],
+          AC_SUBST(TEST_WRAPPER)
       [echo "UNSUPPORTED PLATFORM: ${with_platform}"])
 
 ODP_CFLAGS="$ODP_CFLAGS -DIMPLEMENTATION_NAME=$IMPLEMENTATION_NAME"
