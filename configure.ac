@@ -199,7 +199,7 @@ AS_IF([test "${with_platform}" = "linux-generic"],
           [ODP_CFLAGS="$ODP_CFLAGS -std=gnu99"]
           [ODP_LIB_STR="odp-dpdk"]
           [AC_CONFIG_SRCDIR(test/linux-dpdk/wrapper-script.sh)]
-          [TEST_WRAPPER="test/linux-dpdk/wrapper-script.sh"],
+          [TEST_WRAPPER=test/linux-dpdk/wrapper-script.sh],
           AC_SUBST(TEST_WRAPPER)
       [echo "UNSUPPORTED PLATFORM: ${with_platform}"])
 
