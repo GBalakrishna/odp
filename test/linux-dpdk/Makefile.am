@@ -40,6 +40,8 @@ SUBDIRS += validation/api/pktio
 endif
 endif
 
+LOG_COMPILER = @top_srcdir@/$(TEST_WRAPPER)
+
 dist_check_SCRIPTS = run-test tests-validation.env $(LOG_COMPILER)
 
 test_SCRIPTS = $(dist_check_SCRIPTS)
