@@ -307,6 +307,9 @@ jobs:
                           - ./configure --with-platform=linux-dpdk --enable-test-cpp --enable-test-vald --enable-test-helper --enable-test-perf --enable-user-guides --enable-test-perf-proc --enable-test-example --with-sdk-install-path=`pwd`/dpdk-17.02/${TARGET} --with-cunit-path=$HOME/cunit-install/$CROSS_ARCH $CONF
                           - make -j $(nproc)
                           - sudo LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" make check
+                          - find . -name 'atomic_main.log' -exec cat {} \;
+                          - find . -name 'cpumask_main.log' -exec cat {} \;
+
 after_failure:
   - cat config.log
   - find . -name "*.trs" | xargs grep -l '^.test-result. FAIL' | while read trs ; do echo FAILURE detected at $trs; cat ${trs%%.trs}.log ; done
